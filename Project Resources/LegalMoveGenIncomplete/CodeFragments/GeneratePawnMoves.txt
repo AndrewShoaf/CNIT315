@@ -1,0 +1,139 @@
+/// generate the other moves (captures and quiet ones);
+			/// don't forget about the en passant captures;
+			/// make sure that the pinned pieces are only allowed 
+			/// to move along the direction of their pinning!
+
+			// generate pawn moves
+			pt = PAWN;
+			p_our = make_piece(sideToMove, pt);
+			int pcnt = pos.piece_count(sideToMove, pt);
+			ptrPieceList = pos.piece_list(sideToMove, pt);
+			for (int i=0; i<pcnt; i++)
+			{
+				sq = ptrPieceList[i];
+				dir=0;
+				while (protoMoves[p_our][sq][dir][0]!=NO) // with pawns, we won't exhaust directions
+				{
+					opt=0;
+					do
+					{
+						s = protoMoves[p_our][sq][dir][opt];
+						p = pos.piece_on(s);
+						c = colorOf(p);
+					
+						if(c==(~sideToMove)||(p==EN_PASSANT)) 
+						{   // encountered an enemy piece or an en passant square
+						
+							if (dir)
+							{   // can capture unless pinned along another direction
+								if ((ci.pinned&sq).none()||same_line(sq,s,ksq)) 
+								{
+									m.from = sq;
+									m.to = s;
+									m.moveFlags.reset(); // not computing moveFlags correctly yet
+									m.score = 0;         // not computing score correctly yet
+									m.moveFlags[M_CAPTURE]=1;
+									if(p==EN_PASSANT)
+										m.moveFlags[M_EN_PASSANT]=1;
+									if (sideToMove) // black's turn to move
+									{			
+										if (ranksOfSquares[sq]==RANK_2)
+										{   // capture by black pawn with promotion
+											m.promotionPieceType = KNIGHT;
+											Insert(RootMove(m));
+											m.promotionPieceType = BISHOP;
+											Insert(RootMove(m));
+											m.promotionPieceType = ROOK;
+											Insert(RootMove(m));
+											m.promotionPieceType = QUEEN;
+											Insert(RootMove(m));
+										}
+										else
+										{   // capture by black pawn without promotion
+											m.promotionPieceType = NO_PIECE_TYPE;
+											Insert(RootMove(m));
+										}
+									}
+									else // white's turn to move
+									{
+										if (ranksOfSquares[sq]==RANK_7)
+										{   // capture by white pawn with promotion
+											m.promotionPieceType = KNIGHT;
+											Insert(RootMove(m));
+											m.promotionPieceType = BISHOP;
+											Insert(RootMove(m));
+											m.promotionPieceType = ROOK;
+											Insert(RootMove(m));
+											m.promotionPieceType = QUEEN;
+											Insert(RootMove(m));
+										}
+										else
+										{   // capture by white pawn without promotion
+											m.promotionPieceType = NO_PIECE_TYPE;
+											Insert(RootMove(m));
+										}
+									}
+								}
+							}
+							else break; // pawn blocked by an enemy piece
+						}
+						else if (c == NO_COLOR)
+						{   // can move forward (even if pinned along the vertical direction)
+							if(!dir)
+							{
+								// cannot move forward a pawn pinned along a diagonal:
+								if (((ci.pinned)&sq).any() && (file_distance(sq,ksq)));
+								else
+								{
+									m.from = sq;
+									m.to = s;
+									m.moveFlags.reset(); // not computing moveFlags correctly yet
+									m.score = 0;         // not computing score correctly yet
+									if (sideToMove) // black's turn to move
+									{			
+										if (ranksOfSquares[sq]==RANK_2)
+										{   // black pawn promotion
+											m.promotionPieceType = KNIGHT;
+											Insert(RootMove(m));
+											m.promotionPieceType = BISHOP;
+											Insert(RootMove(m));
+											m.promotionPieceType = ROOK;
+											Insert(RootMove(m));
+											m.promotionPieceType = QUEEN;
+											Insert(RootMove(m));
+										}
+										else
+										{   // black pawn moves forward
+											m.promotionPieceType = NO_PIECE_TYPE;
+											Insert(RootMove(m));
+										}
+									}
+									else // white's turn to move
+									{
+										if (ranksOfSquares[sq]==RANK_7)
+										{   // white pawn promotion
+											m.promotionPieceType = KNIGHT;
+											Insert(RootMove(m));
+											m.promotionPieceType = BISHOP;
+											Insert(RootMove(m));
+											m.promotionPieceType = ROOK;
+											Insert(RootMove(m));
+											m.promotionPieceType = QUEEN;
+											Insert(RootMove(m));
+										}
+										else
+										{   // white pawn moves forward
+											m.promotionPieceType = NO_PIECE_TYPE;
+											Insert(RootMove(m));
+										}
+									}
+								}
+							}
+						}
+						else break; // pawn blocked by our own piece
+						opt++;
+					}
+					while (protoMoves[p_our][sq][dir][opt]!=NO);
+					dir++;
+				}
+			}

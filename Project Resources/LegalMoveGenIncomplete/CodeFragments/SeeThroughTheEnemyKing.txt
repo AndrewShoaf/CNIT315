@@ -1,0 +1,30 @@
+	/// Are we defending Square s with a QUEEN or ROOK 
+	/// from a horizontal or vertical direction?
+	// if we're playing white, imagine a black rook in Square s;
+	// otherwise imagine a white rook in the square.
+	// Now explore the rook's capture directions to find out if 
+	// a queen or rook of our color is there:
+	p_our = Piece(WHITE_ROOK + sideToMove);
+	p_their = Piece(WHITE_ROOK + ~sideToMove);
+	p_our_too = Piece(WHITE_QUEEN + sideToMove);
+	p_their_too = Piece(WHITE_KING + ~sideToMove);
+	dir=0;
+    while (protoMoves[p_their][s][dir][0]!=NO) // with rooks, we won't exhaust directions
+	{
+		opt=0; 
+		do
+		{
+			sq = protoMoves[p_their][s][dir][opt];
+			p = piece_on(sq);
+			if (p > EN_PASSANT) // if the square is NOT (empty OR en_passant) 
+			{
+				if ((p==p_our)||(p==p_our_too)) // found our rook or queen
+					return false; // notDefended == false
+				else if (p!=p_their_too) // we can "see through" the enemy king!
+					break; 
+			}
+			opt++;
+		}
+		while (protoMoves[p_their][s][dir][opt]!=NO);
+		dir++;
+	}
