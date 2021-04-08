@@ -7,12 +7,12 @@
   Copyright (C) 2008-2012 Marco Costalba, Joona Kiiski, Tord Romstad
 
   Kaissa 1.00 is a free, open-source chess program derived from the original Kaissa.
-  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors); 
+  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors);
   Other contributors: A.V. Uskov, A.R. Bitman, A. Barayev, A. Leman, and M. Rosenfeld
   Copyright (C) 1990-1991 JV ParaGraph, intellectual property rights transferred to DISCo in 1994;
-  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin, 
-  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky. 
-  Sources used by written permission from DISCo. 
+  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin,
+  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky.
+  Sources used by written permission from DISCo.
 
   LegalMoveGen is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

@@ -7,12 +7,12 @@
   Copyright (C) 2008-2012 Marco Costalba, Joona Kiiski, Tord Romstad
 
   Kaissa 1.00 is a free, open-source chess program derived from the original Kaissa.
-  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors); 
+  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors);
   Other contributors: A.V. Uskov, A.R. Bitman, A. Barayev, A. Leman, and M. Rosenfeld
   Copyright (C) 1990-1991 JV ParaGraph, intellectual property rights transferred to DISCo in 1994;
-  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin, 
-  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky. 
-  Sources used by written permission from DISCo. 
+  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin,
+  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky.
+  Sources used by written permission from DISCo.
 
   LegalMoveGen is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 using namespace std;
 
 const int NUM_COLORS=2;
-enum Color {NO_COLOR=-1, WHITE=0, BLACK=1}; 
+enum Color {NO_COLOR=-1, WHITE=0, BLACK=1};
 // Color is similar to OLD_PIECE_COLOR in Kaissa 1.00 (CHESS.H)
 // and Color in Stockfish 2.2.2 (types.h)
 const int NUM_PIECE_TYPES=7;
@@ -48,10 +48,10 @@ enum PieceType {NO_PIECE_TYPE, PAWN, KNIGHT, KING, QUEEN, ROOK, BISHOP};
 
 enum PieceCategory {NO_CATEGORY=-1, PAWN_KNIGHT_OR_KING, SLIDING_PIECE};
 // Only sliding pieces (bishops, rooks, and queens) can pin other pieces.
-const int NUM_PIECES=14; 
-enum Piece {NO_PIECE, EN_PASSANT, WHITE_PAWN, BLACK_PAWN, WHITE_KNIGHT, 
-	BLACK_KNIGHT, WHITE_KING, BLACK_KING, WHITE_QUEEN, BLACK_QUEEN, 
-	WHITE_ROOK, BLACK_ROOK, WHITE_BISHOP, BLACK_BISHOP}; 
+const int NUM_PIECES=14;
+enum Piece {NO_PIECE, EN_PASSANT, WHITE_PAWN, BLACK_PAWN, WHITE_KNIGHT,
+	BLACK_KNIGHT, WHITE_KING, BLACK_KING, WHITE_QUEEN, BLACK_QUEEN,
+	WHITE_ROOK, BLACK_ROOK, WHITE_BISHOP, BLACK_BISHOP};
 // Piece is a cross of OLD_PIECE_NAME in Kaissa 1.00 (CHESS.H) and
 // Piece in Stockfish 2.2.2 (types.h)
 const int NUM_SQUARES=64; // not counting the NO square
@@ -68,8 +68,8 @@ enum Square {A1, B1, C1, D1, E1, F1, G1, H1,
 // Square in Stockfish 2.2.2 (types.h)
 
 // A piece can move in at most 8 directions:
-const int MAX_DIRECTIONS = 8; 
-// A piece can have up to 7 options of where to move to in a given 
+const int MAX_DIRECTIONS = 8;
+// A piece can have up to 7 options of where to move to in a given
 // direction. We add a pseudo-option for a sentinel (NO):
 const int MAX_OPTIONS = 8;
 // File and Rank below are from Stockfish 2.2.2 (types.h):
@@ -77,7 +77,7 @@ const int NUM_FILES = 8;
 enum File {FILE_A, FILE_B, FILE_C, FILE_D, FILE_E, FILE_F, FILE_G, FILE_H};
 const int NUM_RANKS = 8;
 enum Rank {RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8};
-const File filesOfSquares[NUM_SQUARES] = 
+const File filesOfSquares[NUM_SQUARES] =
    {FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,
 	FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,
 	FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,
@@ -86,7 +86,7 @@ const File filesOfSquares[NUM_SQUARES] =
 	FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,
 	FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H,
 	FILE_A,FILE_B,FILE_C,FILE_D,FILE_E,FILE_F,FILE_G,FILE_H};
-const Rank ranksOfSquares[NUM_SQUARES] = 
+const Rank ranksOfSquares[NUM_SQUARES] =
    {RANK_1,RANK_1,RANK_1,RANK_1,RANK_1,RANK_1,RANK_1,RANK_1,
 	RANK_2,RANK_2,RANK_2,RANK_2,RANK_2,RANK_2,RANK_2,RANK_2,
 	RANK_3,RANK_3,RANK_3,RANK_3,RANK_3,RANK_3,RANK_3,RANK_3,
@@ -101,18 +101,18 @@ const int knightOffsets[MAX_DIRECTIONS]={-17,-15,-10,-6,6,10,15,17};
 
 // Two halves of the board (for ProtoMoveGen):
 const int NUM_HALVES=2;
-enum Half {LEFT_HALF, RIGHT_HALF}; 
+enum Half {LEFT_HALF, RIGHT_HALF};
 
 // Proto-move priorities vary from left to right half of the board
 // knightPriorities were used in ProtoMoveGen. We won't need them here.
 // They provided an index into knightOffsets.
 const int knightPriorities[NUM_COLORS][NUM_HALVES][MAX_DIRECTIONS]=
 {{{7,5,6,4,3,1,2,0},{6,4,7,5,2,0,3,1}},
- {{1,3,0,2,5,7,4,6},{0,2,1,3,4,6,5,7}}}; 
+ {{1,3,0,2,5,7,4,6},{0,2,1,3,4,6,5,7}}};
 
 // CastleRight is from Stockfish 2.2.2.
 const int NUM_CASTLE_RIGHTS=16; // to cover all combinations
-enum CastleRight 
+enum CastleRight
 {
   CASTLES_NONE = 0,
   WHITE_OO     = 1,
@@ -123,7 +123,7 @@ enum CastleRight
 };
 
 // colorOf computes Color from Piece
-inline Color colorOf(Piece p) 
+inline Color colorOf(Piece p)
 {
 	return Color(p>>1?p&1:-1);
 }
@@ -140,88 +140,88 @@ inline PieceCategory pieceCategoryOf(Piece p)
 	return PieceCategory(p>>1?(p>>3):-1);
 }
 
-inline Piece make_piece(Color c, PieceType pt) 
+inline Piece make_piece(Color c, PieceType pt)
 {
   return Piece((pt << 1) | c);
 }
 
 // make_square computes Square from File and Rank
-inline Square make_square(File f, Rank r) 
+inline Square make_square(File f, Rank r)
 {
   return Square((r << 3) | f);
 }
 
 // needed to compute StepAttacksBB
-inline bool square_is_ok(Square s) 
+inline bool square_is_ok(Square s)
 {
   return s >= A1 && s <= H8;
 }
 
 // file_of computes file of Square
-inline File file_of(Square s) 
+inline File file_of(Square s)
 {
   return File(s & 7);
 }
 
 // rank_of computes rank of Square
-inline Rank rank_of(Square s) 
+inline Rank rank_of(Square s)
 {
   return Rank(s >> 3);
 }
 
 // file_distance computes file distance between two squares
-inline int file_distance(Square s1, Square s2) 
+inline int file_distance(Square s1, Square s2)
 {
   return abs(file_of(s1) - file_of(s2));
 }
 
 // rank_distance computes rank distance between two squares
-inline int rank_distance(Square s1, Square s2) 
+inline int rank_distance(Square s1, Square s2)
 {
   return abs(rank_of(s1) - rank_of(s2));
 }
 
 // return a char corresponding to a given piece type
-inline char piece_type_to_char(PieceType pt) 
+inline char piece_type_to_char(PieceType pt)
 {
   return " PNKRQB"[pt];
 }
 
 // return a char corresponding to a given chessboard file
-inline char file_to_char(File f) 
+inline char file_to_char(File f)
 {
   return char(f - FILE_A + int('a'));
 }
 
-// return a char corresponding to a given chessboard rank 
-inline char rank_to_char(Rank r) 
+// return a char corresponding to a given chessboard rank
+inline char rank_to_char(Rank r)
 {
   return char(r - RANK_1 + int('1'));
 }
 
 // along with square_is_ok, also needed to compute StepAttacksBB
-inline int square_distance(Square s1, Square s2) 
+inline int square_distance(Square s1, Square s2)
 {
   return SquareDistance[s1][s2];
 }
 
-inline Square relative_square(Color c, Square s) 
+inline Square relative_square(Color c, Square s)
 {
   return Square(s ^ (c * 56));
 }
 
-inline bool opposite_colors(Square s1, Square s2) 
+inline bool opposite_colors(Square s1, Square s2)
 {
   int s = s1 ^ s2;
   return ((s >> 3) ^ s) & 1;
 }
 
-inline Rank relative_rank(Color c, Rank r) 
+inline Rank relative_rank(Color c, Rank r)
 {
   return Rank(r ^ (c * 7));
 }
 
-inline Rank relative_rank(Color c, Square s) 
+inline Rank relative_rank(Color c, Square s)
 {
   return relative_rank(c, rank_of(s));
 }
@@ -232,11 +232,11 @@ const int NUM_MOVE_FLAGS=16;
 // M_NO_BOOK_MOVE added to deal with the opening book eventually
 // M_MOVE_NONE, M_EVASION, M_QUIET, M_DRAW, M_STALEMATE, M_CHECKMATE added
 enum MoveFlagNames {M_EN_PASSANT, M_CASTLE_SHORT, M_CASTLE_LONG, M_NULL_MOVE, M_MOVE_NONE,
-	M_NO_BOOK_MOVE, M_CAPTURE, M_ISCHECK, M_KILLER, M_PASSAGE, M_CHECK_DEFENSE, M_EVASION, 
+	M_NO_BOOK_MOVE, M_CAPTURE, M_ISCHECK, M_KILLER, M_PASSAGE, M_CHECK_DEFENSE, M_EVASION,
     M_QUIET, M_DRAW, M_STALEMATE, M_CHECKMATE};
 typedef bitset<NUM_MOVE_FLAGS> MoveFlags;
 
-const int MAX_MOVES      = 256; // D.A.G., 02/04/2012: No position is known with more than 218 moves to choose from 
+const int MAX_MOVES      = 256; // D.A.G., 02/04/2012: No position is known with more than 218 moves to choose from
 const int MAX_PLY        = 100; // D.A.G., 02/06/2012: 2 plys = 1 move (made by both sides)
 const int MAX_PLY_PLUS_2 = MAX_PLY + 2;
 // struct Move is modeled after Kaissa 1.00
@@ -246,43 +246,43 @@ struct Move
   Square to;
   PieceType promotionPieceType;
   MoveFlags moveFlags;
-  int score; // D.A.G., 02/26/2012: score comes from Stockfish 2.2.2. 
-             // Kaissa 1.00 had "profit" (capture profit). 
+  int score; // D.A.G., 02/26/2012: score comes from Stockfish 2.2.2.
+             // Kaissa 1.00 had "profit" (capture profit).
 };
 
 // An operator to compare two move scores:
-inline bool operator<(const Move& f, const Move& s) 
+inline bool operator<(const Move& f, const Move& s)
 {
   return f.score < s.score;
 }
 
 // An operator to invert a color:
-inline Color operator~(Color c) 
+inline Color operator~(Color c)
 {
   return Color(c ^ 1);
 }
 
 // Returns a move's square of origin:
-inline Square from_sq(Move m) 
+inline Square from_sq(Move m)
 {
   return m.from;
 }
 
 // Returns a move's destination:
-inline Square to_sq(Move m) 
+inline Square to_sq(Move m)
 {
   return m.to;
 }
 
-// A useful check: For example, our move_none 
+// A useful check: For example, our move_none
 // from search.h (RootMove) is not ok.
-inline bool is_ok(Move m) 
+inline bool is_ok(Move m)
 {
-  return from_sq(m) != to_sq(m); 
+  return from_sq(m) != to_sq(m);
 }
 
 // is_promotion returns true if a move is a promotion
-inline bool is_promotion(Move m) 
+inline bool is_promotion(Move m)
 {
   return m.promotionPieceType != NO_PIECE_TYPE;
 }
@@ -299,9 +299,36 @@ inline int is_castle(Move m) {
 
 // is_special returns true if a move is either promotion,
 // or en passant, or castle
-inline bool is_special(Move m) 
+inline bool is_special(Move m)
 {
   return is_enpassant(m) || is_castle(m) || is_promotion(m);
+}
+
+// file_difference computes file difference between two squares
+inline int file_difference(Square s1, Square s2)
+{
+  return file_of(s1) - file_of(s2);
+}
+
+// rank_difference computes rank difference between two squares
+inline int rank_difference(Square s1, Square s2)
+{
+  return rank_of(s1) - rank_of(s2);
+}
+
+inline bool same_line(Square sq, Square s, Square ksq)
+{
+	if ((!file_difference(sq,ksq))&&(!file_difference(sq,s)))
+		return true;
+	else if ((!rank_difference(sq,ksq))&&(!rank_difference(sq,s)))
+		return true;
+	else if ((file_distance(sq,ksq)==rank_distance(sq,ksq))&&
+		(file_distance(s,ksq)==rank_distance(s, ksq))&&
+		(file_difference(sq,ksq)*rank_difference(sq,ksq)*
+              file_difference(s,ksq)*rank_difference(s,ksq)))
+		return true;
+	else
+		return false;
 }
 
 // D.A.G., 03/19/2012. Piece values of Kaissa 1.00 multiplied by 120 and adjusted:
