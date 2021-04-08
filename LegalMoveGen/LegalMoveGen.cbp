@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="LegalMoveGen" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/LegalMoveGen" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/LegalMoveGen" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="CodeFragments/CheckInfoConstructor.txt" />
+		<Unit filename="CodeFragments/GeneratePawnMoves.txt" />
+		<Unit filename="CodeFragments/SeeThroughTheEnemyKing.txt" />
+		<Unit filename="CodeFragments/twobitboardfunctions.txt" />
+		<Unit filename="FENPositionFiles/GundersenFaul1928.fen" />
+		<Unit filename="FENPositionFiles/botcap1938.fen" />
+		<Unit filename="FENPositionFiles/capturechecker.fen" />
+		<Unit filename="FENPositionFiles/capturecheckerenpassant.fen" />
+		<Unit filename="FENPositionFiles/capturepinners.fen" />
+		<Unit filename="FENPositionFiles/defendedchecker.fen" />
+		<Unit filename="FENPositionFiles/doublepawncheck.fen" />
+		<Unit filename="FENPositionFiles/doublepawncheck2.fen" />
+		<Unit filename="FENPositionFiles/enpassantcheckercapture.fen" />
+		<Unit filename="FENPositionFiles/equal.fen" />
+		<Unit filename="FENPositionFiles/kingtakeschecker.fen" />
+		<Unit filename="FENPositionFiles/lineofdefensetest.fen" />
+		<Unit filename="FENPositionFiles/maxchecks.fen" />
+		<Unit filename="FENPositionFiles/moves218.fen" />
+		<Unit filename="FENPositionFiles/pawndefenses.fen" />
+		<Unit filename="FENPositionFiles/pawnknightcastle.fen" />
+		<Unit filename="FENPositionFiles/pinnedenpassantattacker.fen" />
+		<Unit filename="FENPositionFiles/twoenpassants.fen" />
+		<Unit filename="FENPositionFiles/twopinned.fen" />
+		<Unit filename="LegalMoveGen.cpp" />
+		<Unit filename="LegalMoveGen.layout" />
+		<Unit filename="SampleOutputs/outputcheck.txt" />
+		<Unit filename="SampleOutputs/outputlineofdefense.txt" />
+		<Unit filename="SampleOutputs/outputnocheck.txt" />
+		<Unit filename="benchmark.cpp" />
+		<Unit filename="bitboard.cpp" />
+		<Unit filename="bitboard.h" />
+		<Unit filename="chess.h" />
+		<Unit filename="movegen.cpp" />
+		<Unit filename="movegen.h" />
+		<Unit filename="position.cpp" />
+		<Unit filename="position.h" />
+		<Unit filename="search.h" />
+		<Unit filename="timeman.cpp" />
+		<Unit filename="timeman.h" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
