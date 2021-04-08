@@ -1,0 +1,55 @@
+# depslib dependency file v1.0
+1332199490 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\benchmark.cpp
+	<fstream>
+	<iostream>
+	<vector>
+	"timeman.h"
+	"movegen.h"
+
+1332199452 d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\timeman.h
+	<windows.h>
+	<sys/timeb.h>
+	<sys/time.h>
+	<sys/types.h>
+	<unistd.h>
+	<sys/pstat.h>
+	<xmmintrin.h>
+	"search.h"
+
+1332199418 d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\search.h
+	<cstring>
+	<vector>
+	"position.h"
+
+1332199384 d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\position.h
+	<string>
+	"bitboard.h"
+
+1332199310 d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\bitboard.h
+	"chess.h"
+
+1332199236 d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\chess.h
+	<bitset>
+
+1332199332 d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\movegen.h
+	"search.h"
+
+1332199526 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\bitboard.cpp
+	<iostream>
+	"bitboard.h"
+
+1332199610 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\legalmovegen.cpp
+	<iomanip>
+	<iostream>
+	<sstream>
+	<string>
+	"timeman.h"
+
+1332199668 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\movegen.cpp
+	<algorithm>
+	<cassert>
+	"movegen.h"
+
+1332199780 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\timeman.cpp
+	"timeman.h"
+

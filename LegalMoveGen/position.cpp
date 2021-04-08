@@ -7,12 +7,12 @@
   Copyright (C) 2008-2012 Marco Costalba, Joona Kiiski, Tord Romstad
 
   Kaissa 1.00 is a free, open-source chess program derived from the original Kaissa.
-  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors); 
+  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors);
   Other contributors: A.V. Uskov, A.R. Bitman, A. Barayev, A. Leman, and M. Rosenfeld
   Copyright (C) 1990-1991 JV ParaGraph, intellectual property rights transferred to DISCo in 1994;
-  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin, 
-  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky. 
-  Sources used by written permission from DISCo. 
+  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin,
+  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky.
+  Sources used by written permission from DISCo.
 
   LegalMoveGen is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 */
 // position.cpp implements class Position defined in position.h
 #include <iostream>
+#include <cstring>
 #include <sstream>
 #include "position.h"
 using namespace std;
@@ -42,7 +43,7 @@ using namespace std;
 // Hash keys:
 Key Position::zobrist[NUM_PIECES][NUM_SQUARES];
 // zobEp below is commented out by D.A.G.: EN_PASSANT is now a piece
-//Key Position::zobEp[NUM_SQUARES]; 
+//Key Position::zobEp[NUM_SQUARES];
 Key Position::zobCastle[NUM_CASTLE_RIGHTS];
 Key Position::zobSideToMove;
 Key Position::zobExclusion;
@@ -64,11 +65,11 @@ void Position::init() {
 		  // Bishop doesn't leave footprint on its own square
 		  // in order to reduce chances of canceling out of
 		  // two bishops in opposing corners of the board:
-		  if ((p!=NO_PIECE)&&(pt!=BISHOP)) 
+		  if ((p!=NO_PIECE)&&(pt!=BISHOP))
 			  zobrist[p][s]^=SquareBB[s];
 		  if (p==EN_PASSANT)
 		  {   // elongate en passant's "footprint":
-			  if (rank_of(s)==RANK_3) 
+			  if (rank_of(s)==RANK_3)
 			  {
 				  zobrist[p][s]^=SquareBB[Square(s-8)];
 				  zobrist[p][s]^=SquareBB[Square(s-16)];
@@ -126,9 +127,9 @@ void Position::init() {
   string keyvalExclusion="0101010110101010010101011010101001010101101010100101010110101010";
   zobExclusion  = Key(keyvalExclusion,0,64);
 
-  // D.A.G., 02/25/2012: Piece-Square Tables are a simple way to assign values to 
-  // specific pieces on specific locations. A symmetric table is created for  
-  // each piece of each color, and values are assigned to each piece-square pair. 
+  // D.A.G., 02/25/2012: Piece-Square Tables are a simple way to assign values to
+  // specific pieces on specific locations. A symmetric table is created for
+  // each piece of each color, and values are assigned to each piece-square pair.
   /// D.A.G., 02/26/2012: Commented out computation of Piece-Square Tables for now.
   /*
   for (Piece p = W_PAWN; p <= W_KING; p++)
@@ -145,10 +146,10 @@ void Position::init() {
 }
 
 /// Position c'tors. Here we always create a copy of the original position
-/// or the FEN string, we want the newborn Position object to be independent 
+/// or the FEN string, we want the newborn Position object to be independent
 /// from any external data so we detach state pointer from the source one.
 
-void Position::copy(const Position& pos, int th) 
+void Position::copy(const Position& pos, int th)
 {
   memcpy(this, &pos, sizeof(Position));
   startState = *st;
@@ -160,7 +161,7 @@ void Position::copy(const Position& pos, int th)
 }
 
 // This constructor makes an instance of Position from a fen string:
-Position::Position(const string& fen, bool isChess960, int th) 
+Position::Position(const string& fen, bool isChess960, int th)
 {
   from_fen(fen, isChess960);
   threadID = th;
@@ -171,7 +172,7 @@ Position::Position(const string& fen, bool isChess960, int th)
 /// string. This function is not very robust - make sure that input FENs are
 /// correct (this is assumed to be the responsibility of the GUI).
 
-void Position::from_fen(const string& fenStr, bool isChess960) 
+void Position::from_fen(const string& fenStr, bool isChess960)
 {
 /*
    A FEN string defines a particular position using only the ASCII character set.
@@ -269,10 +270,10 @@ void Position::from_fen(const string& fenStr, bool isChess960)
   {
       st->epSquare = make_square(File(col - 'a'), Rank(row - '1'));
 	  put_piece(EN_PASSANT, st->epSquare); // Added by D.A.G. on 03/05/2012
-	  // En passant square in FEN is recorded regardless of whether 
+	  // En passant square in FEN is recorded regardless of whether
 	  // there is a pawn in position to make an en passant capture.
-	  // D.A.G., 03/05/2012: Comment out the code below that used to ignore  
-	  // en passant info from FEN if no pawn capture were possible. 
+	  // D.A.G., 03/05/2012: Comment out the code below that used to ignore
+	  // en passant info from FEN if no pawn capture were possible.
 	  // Reason: I don't want attackers_to() to be invoked so early.
 	  /*
       if ((attackers_to(st->epSquare) & pieces(PAWN, sideToMove)).none())
@@ -312,7 +313,7 @@ void Position::from_fen(const string& fenStr, bool isChess960)
 /// Position::set_castle_right() is an helper function used to set castling
 /// rights given the corresponding color and the rook starting square.
 
-void Position::set_castle_right(Color c, Square rsq) 
+void Position::set_castle_right(Color c, Square rsq)
 {
   int f = (rsq < king_square(c) ? WHITE_OOO : WHITE_OO) << c;
 
@@ -326,7 +327,7 @@ void Position::set_castle_right(Color c, Square rsq)
 /// Position::to_fen() returns a FEN representation of the position. In case
 /// of Chess960 the Shredder-FEN notation is used. Mainly a debugging function.
 
-const string Position::to_fen() const 
+const string Position::to_fen() const
 {
   std::ostringstream fen;
   Square sq;
@@ -386,9 +387,9 @@ const string Position::to_fen() const
 /// move_to_uci() converts a move to a string in coordinate notation
 /// (g1f3, a7a8q, etc.). The only special case is castling moves, where we
 /// print in the e1g1 notation in normal chess mode, and in e1h1 notation in
-/// Chess960 mode. 
+/// Chess960 mode.
 
-const string move_to_uci(Move m, bool chess960) 
+const string move_to_uci(Move m, bool chess960)
 {
   Square from = from_sq(m);
   Square to = to_sq(m);
@@ -417,11 +418,11 @@ const string move_to_uci(Move m, bool chess960)
 /// the standard output. If a move were given then also the san (standard algebraic notation)
 /// used to be printed. D.A.G., 03/05/2012: Replaced the latter feature with a call to move_to_uci.
 
-void Position::print(Move move) const 
+void Position::print(Move move) const
 {
   const char* dottedLine = "\n+---+---+---+---+---+---+---+---+\n";
 
-  Position p(*this, thread()); // D.A.G., 03/05/2012: A copy-constructor is invoked here! 
+  Position p(*this, thread()); // D.A.G., 03/05/2012: A copy-constructor is invoked here!
   cout << "\nMove is: " << (sideToMove == BLACK ? ".." : "") << move_to_uci(move,chess960!=0);
   // D.A.G., 03/05/2012: Replaced move_to_san(p, move); with a call to move_to_uci above.
 
@@ -449,7 +450,7 @@ void Position::print(Move move) const
 }
 /// Position::clear() erases the position object to a pristine state, with an
 /// empty board, white to move, and no castling rights.
-void Position::clear() 
+void Position::clear()
 {
   st = &startState;
   memset(st, 0, sizeof(StateInfo));
@@ -476,7 +477,7 @@ void Position::clear()
 
 /// Position::put_piece() puts a piece on the given square of the board,
 /// updating the board array, pieces list, bitboards, and piece counts.
-void Position::put_piece(Piece p, Square s) 
+void Position::put_piece(Piece p, Square s)
 {
   Color c = colorOf(p);
   PieceType pt = pieceTypeOf(p);
@@ -499,7 +500,7 @@ void Position::put_piece(Piece p, Square s)
 /// compute_key() function is only used when a new position is set up, and
 /// to verify the correctness of the hash key when running in debug mode.
 
-Key Position::compute_key() const 
+Key Position::compute_key() const
 {
   Key result = zobCastle[st->castleRights];
 
@@ -525,7 +526,7 @@ template<bool SkipRepetition>
 bool Position::is_draw() const {
 
   // Draw by material?
-  if (pieces(PAWN).none() && 
+  if (pieces(PAWN).none() &&
 	  (non_pawn_material(WHITE) + non_pawn_material(BLACK) <= BishopValueMidgame))
 	  // BishopValueMidgame == 840 (7 of Kaissa 1.00 multiplied by 120), see chess.h
       return true;
@@ -533,7 +534,7 @@ bool Position::is_draw() const {
   // Draw by the 50 moves rule?       /* D.A.G., 03/19/2012. Commented out. */
   if (st->rule50 > 99 && (!in_check() /*|| MoveList<MV_LEGAL>(*this).size()*/))
 	  // D.A.G., 03/19/2012. The purpose of !in_check() is to eventually make sure that
-	  // we're not checkmated when we're trying to claim the draw. Note that 
+	  // we're not checkmated when we're trying to claim the draw. Note that
 	  // checkersBB has to be computed before in_check() can work correctly!
       return true;
 
