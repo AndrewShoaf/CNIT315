@@ -53,3 +53,9 @@
 1332199780 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\timeman.cpp
 	"timeman.h"
 
+1617905519 source:d:\school\2021 spring\315 c++\team project\github\cnit315\legalmovegen\position.cpp
+	<iostream>
+	<cstring>
+	<sstream>
+	"position.h"
+
