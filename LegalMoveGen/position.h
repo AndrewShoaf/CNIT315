@@ -7,12 +7,12 @@
   Copyright (C) 2008-2012 Marco Costalba, Joona Kiiski, Tord Romstad
 
   Kaissa 1.00 is a free, open-source chess program derived from the original Kaissa.
-  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors); 
+  Copyright (C) 1972-1980 G.M. Adelson-Velsky, V.L. Arlazarov, and M.V. Donskoy (Kaissa authors);
   Other contributors: A.V. Uskov, A.R. Bitman, A. Barayev, A. Leman, and M. Rosenfeld
   Copyright (C) 1990-1991 JV ParaGraph, intellectual property rights transferred to DISCo in 1994;
-  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin, 
-  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky. 
-  Sources used by written permission from DISCo. 
+  Authors of Kaissa 1.00: M.V. Donskoy, A.V. Dubetz, M.Yu. Karaev, V.A. Kokin,
+  D.V. Posvjansky, I.R. Shabalin, A.G. Sidorovitch, E.A. Sokolinsky.
+  Sources used by written permission from DISCo.
 
   LegalMoveGen is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -39,15 +39,15 @@
 // with the order of pieces in Piece (chess.h).
 /// To convert a Piece to and from a FEN char:
 const string PieceToChar(" .PpNnKkQqRrBb");
-inline const std::string square_to_string(Square s) 
+inline const std::string square_to_string(Square s)
 {
   char ch[] = { file_to_char(file_of(s)), rank_to_char(rank_of(s)), 0 };
   return ch;
 }
 class Position; // pre-announce
-/// The checkInfo struct is initialized at constructor time and 
+/// The checkInfo struct is initialized at constructor time and
 /// keeps the information used to detect if a move gives check.
-struct CheckInfo 
+struct CheckInfo
 {
   explicit CheckInfo(const Position&);
 
@@ -62,7 +62,7 @@ struct CheckInfo
 /// is made on the board (by calling Position::do_move), an StateInfo object
 /// must be passed as a parameter.
 
-struct StateInfo 
+struct StateInfo
 {
   // Key pawnKey, materialKey;
   int npMaterial[2]; // non-pawn material
@@ -98,7 +98,7 @@ struct StateInfo
 ///      repetition draws.
 ///    * A counter for detecting 50 move rule draws.
 
-class Position 
+class Position
 {
   // No copy c'tor or assignment operator allowed
   Position(const Position&);
@@ -206,13 +206,13 @@ public:
   Key key() const;
   Key exclusion_key() const;
   // D.A.G., 02/26/2012. Commented out access to pawn_key and material_key.
-  /* 
+  /*
   Key pawn_key() const;
   Key material_key() const;
   */
 
   // Incremental evaluation
-  
+
   int value() const;
   int non_pawn_material(Color c) const;
   // D.A.G., 03/19/2012. Commenting out pst_delta for now, PART 1 of 3:
@@ -296,7 +296,7 @@ private:
 
   // Static variables
   // pieceSquareTable was commented out by D.A.G., 02/25/2012:
-  //static Score pieceSquareTable[NUM_PIECES][NUM_SQUARES]; // [piece][square] 
+  //static Score pieceSquareTable[NUM_PIECES][NUM_SQUARES]; // [piece][square]
   // zobrist was modified by D.A.G., 02/25/2012:
   static Key zobrist[NUM_PIECES][NUM_SQUARES];          // [piece][square]
   // zobEp was commented out by D.A.G., 02/25/2012:
@@ -307,111 +307,111 @@ private:
   static Key zobExclusion;
 };
 
-inline int64_t Position::nodes_searched() const 
+inline int64_t Position::nodes_searched() const
 {
   return nodes;
 }
 
-inline void Position::set_nodes_searched(int64_t n) 
+inline void Position::set_nodes_searched(int64_t n)
 {
   nodes = n;
 }
 
-inline Piece Position::piece_on(Square s) const 
+inline Piece Position::piece_on(Square s) const
 {
   return board[s];
 }
 
-inline Piece Position::piece_moved(Move m) const 
+inline Piece Position::piece_moved(Move m) const
 {
   return board[from_sq(m)];
 }
 
-inline bool Position::square_is_empty(Square s) const 
+inline bool Position::square_is_empty(Square s) const
 {
   return board[s] == NO_PIECE;
 }
 
-inline Color Position::side_to_move() const 
+inline Color Position::side_to_move() const
 {
   return sideToMove;
 }
 
-inline Bitboard Position::occupied_squares() const 
+inline Bitboard Position::occupied_squares() const
 {
   return occupied;
 }
 
-inline Bitboard Position::empty_squares() const 
+inline Bitboard Position::empty_squares() const
 {
   return ~occupied;
 }
 
-inline Bitboard Position::pieces(Color c) const 
+inline Bitboard Position::pieces(Color c) const
 {
   return byColorBB[c];
 }
 
-inline Bitboard Position::pieces(PieceType pt) const 
+inline Bitboard Position::pieces(PieceType pt) const
 {
   return byTypeBB[pt];
 }
 
-inline Bitboard Position::pieces(PieceType pt, Color c) const 
+inline Bitboard Position::pieces(PieceType pt, Color c) const
 {
   return byTypeBB[pt] & byColorBB[c];
 }
 
-inline Bitboard Position::pieces(PieceType pt1, PieceType pt2) const 
+inline Bitboard Position::pieces(PieceType pt1, PieceType pt2) const
 {
   return byTypeBB[pt1] | byTypeBB[pt2];
 }
 
-inline Bitboard Position::pieces(PieceType pt1, PieceType pt2, Color c) const 
+inline Bitboard Position::pieces(PieceType pt1, PieceType pt2, Color c) const
 {
   return (byTypeBB[pt1] | byTypeBB[pt2]) & byColorBB[c];
 }
 
-inline int Position::piece_count(Color c, PieceType pt) const 
+inline int Position::piece_count(Color c, PieceType pt) const
 {
   return pieceCount[c][pt];
 }
 
-inline const Square* Position::piece_list(Color c, PieceType pt) const 
+inline const Square* Position::piece_list(Color c, PieceType pt) const
 {
   return pieceList[c][pt];
 }
 
-inline Square Position::ep_square() const 
+inline Square Position::ep_square() const
 {
   return st->epSquare;
 }
 
-inline Square Position::king_square(Color c) const 
+inline Square Position::king_square(Color c) const
 {
-	//D.A.G., 03/18/2012. Assumes that there's exactly one king 
+	//D.A.G., 03/18/2012. Assumes that there's exactly one king
 	//of a given color, thus [0]:
-	return pieceList[c][KING][0];  
+	return pieceList[c][KING][0];
 }
 
-inline bool Position::can_castle(CastleRight f) const 
+inline bool Position::can_castle(CastleRight f) const
 {
   return (st->castleRights & f) != 0;
 }
 
-inline bool Position::can_castle(Color c) const 
+inline bool Position::can_castle(Color c) const
 {
   return (st->castleRights & ((WHITE_OO | WHITE_OOO) << c))!=0;
 }
 
-inline Square Position::castle_rook_square(CastleRight f) const 
+inline Square Position::castle_rook_square(CastleRight f) const
 {
   return castleRookSquare[f];
 }
 // D.A.G., 03/18/2012: Commented out attacks_from for now.
 /*
 template<PieceType Pt>
-inline Bitboard Position::attacks_from(Square s) const 
+inline Bitboard Position::attacks_from(Square s) const
 {
   return  Pt == BISHOP ? bishop_attacks_bb(s, occupied_squares())
         : Pt == ROOK   ? rook_attacks_bb(s, occupied_squares())
@@ -420,52 +420,52 @@ inline Bitboard Position::attacks_from(Square s) const
 }
 
 template<>
-inline Bitboard Position::attacks_from<PAWN>(Square s, Color c) const 
+inline Bitboard Position::attacks_from<PAWN>(Square s, Color c) const
 {
   return StepAttacksBB[make_piece(c, PAWN)][s];
 }
 
-inline Bitboard Position::attacks_from(Piece p, Square s) const 
+inline Bitboard Position::attacks_from(Piece p, Square s) const
 {
   return attacks_from(p, s, occupied_squares());
 }
 
-inline Bitboard Position::attackers_to(Square s) const 
+inline Bitboard Position::attackers_to(Square s) const
 {
   return attackers_to(s, occupied_squares());
 }
 */
-inline Bitboard Position::checkers() const 
+inline Bitboard Position::checkers() const
 {
   return st->checkersBB;
 }
 
-inline bool Position::in_check() const 
+inline bool Position::in_check() const
 {
   return st->checkersBB != 0;
 }
 
-inline Bitboard Position::discovered_check_candidates() const 
+inline Bitboard Position::discovered_check_candidates() const
 {
   return hidden_checkers<false>();
 }
 
-inline Bitboard Position::pinned_pieces() const 
+inline Bitboard Position::pinned_pieces() const
 {
   return hidden_checkers<true>();
 }
 
-inline bool Position::pawn_is_passed(Color c, Square s) const 
+inline bool Position::pawn_is_passed(Color c, Square s) const
 {
   return (pieces(PAWN, ~c) & passed_pawn_mask(c, s)).none();
 }
 
-inline Key Position::key() const 
+inline Key Position::key() const
 {
   return st->key;
 }
 
-inline Key Position::exclusion_key() const 
+inline Key Position::exclusion_key() const
 {
   return st->key ^ zobExclusion;
 }
@@ -497,57 +497,57 @@ inline int Position::non_pawn_material(Color c) const {
   return st->npMaterial[c];
 }
 
-inline bool Position::is_passed_pawn_push(Move m) const 
+inline bool Position::is_passed_pawn_push(Move m) const
 {
   return   board[from_sq(m)] == make_piece(sideToMove, PAWN)
         && pawn_is_passed(sideToMove, to_sq(m));
 }
 
-inline int Position::startpos_ply_counter() const 
+inline int Position::startpos_ply_counter() const
 {
   return startPosPly + st->pliesFromNull; // HACK
 }
 
-inline bool Position::opposite_colored_bishops() const 
+inline bool Position::opposite_colored_bishops() const
 {
   return   pieceCount[WHITE][BISHOP] == 1
         && pieceCount[BLACK][BISHOP] == 1
         && opposite_colors(pieceList[WHITE][BISHOP][0], pieceList[BLACK][BISHOP][0]);
 }
 
-inline bool Position::has_pawn_on_7th(Color c) const 
+inline bool Position::has_pawn_on_7th(Color c) const
 {
   return (pieces(PAWN, c) & rank_bb(relative_rank(c, RANK_7))).any();
 }
 
-inline bool Position::is_chess960() const 
+inline bool Position::is_chess960() const
 {
   return chess960 != 0;
 }
 
-inline bool Position::is_capture_or_promotion(Move m) const 
+inline bool Position::is_capture_or_promotion(Move m) const
 {
 	// Commented out by D.A.G., 02/26/2012:
-	//assert(is_ok(m)); 
+	//assert(is_ok(m));
 	return is_ok(m) && (is_special(m) ? !is_castle(m) : !square_is_empty(to_sq(m)));
 }
 
-inline bool Position::is_capture(Move m) const 
+inline bool Position::is_capture(Move m) const
 {
 	// Note that castle is coded as "king captures the rook" // D.A.G.: It used to be!
 	// Commented out by D.A.G., 02/26/2012:
 	// assert(is_ok(m));
-	
+
 	// Modified by D.A.G., 03/18/2012: Castling no longer "captures"; EN_PASSANT is now a piece:
 	return is_ok(m) && (!square_is_empty(to_sq(m)) /*&& !is_castle(m)*/) /*|| is_enpassant(m)*/;
 }
 
-inline PieceType Position::captured_piece_type() const 
+inline PieceType Position::captured_piece_type() const
 {
   return st->capturedType;
 }
 
-inline int Position::thread() const 
+inline int Position::thread() const
 {
   return threadID;
 }
