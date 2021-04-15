@@ -243,6 +243,7 @@ public:
   // Global initialization
   static void init();
 
+
 private:
 
   // Initialization helper functions (used while setting up a position)

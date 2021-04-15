@@ -96,9 +96,10 @@ RootMove RootMoveList::GetNextItem()
 
 void RootMoveList::generate_from_position(Position& pos)
 { // TO DO:
-    Position::Position(pos);
-    Color our_side = Position::side_to_move();
-    cout << our_side << endl;
+    Position position;
+    Color our_side;
+    our_side = position.side_to_move();
+
 }
 
 void RootMoveList::print() const

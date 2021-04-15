@@ -2,9 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="bitboard.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="movegen.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2152" topLine="19" />
+			<Cursor1 position="2721" topLine="32" />
 		</Cursor>
 	</File>
 	<File name="timeman.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -12,24 +12,24 @@
 			<Cursor1 position="1198" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="search.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="search.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="21" />
+			<Cursor1 position="1821" topLine="21" />
 		</Cursor>
 	</File>
-	<File name="movegen.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="LegalMoveGen.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2169" topLine="33" />
+			<Cursor1 position="3073" topLine="60" />
 		</Cursor>
 	</File>
-	<File name="chess.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="movegen.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="10994" topLine="296" />
+			<Cursor1 position="2857" topLine="76" />
 		</Cursor>
 	</File>
-	<File name="benchmark.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="bitboard.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="887" topLine="0" />
+			<Cursor1 position="2152" topLine="19" />
 		</Cursor>
 	</File>
 	<File name="bitboard.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -37,24 +37,24 @@
 			<Cursor1 position="1192" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="position.cpp" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="benchmark.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="16223" topLine="414" />
-		</Cursor>
-	</File>
-	<File name="LegalMoveGen.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2606" topLine="42" />
+			<Cursor1 position="5985" topLine="139" />
 		</Cursor>
 	</File>
 	<File name="position.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4747" topLine="94" />
+			<Cursor1 position="16570" topLine="274" />
 		</Cursor>
 	</File>
-	<File name="movegen.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="chess.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2769" topLine="75" />
+			<Cursor1 position="2070" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="position.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="14828" topLine="48" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
