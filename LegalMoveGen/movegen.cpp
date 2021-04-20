@@ -97,14 +97,35 @@ RootMove RootMoveList::GetNextItem()
 void RootMoveList::generate_from_position(Position& pos)
 { // TO DO:
     Position position;
-    Color our_side;
-    our_side = position.side_to_move();
+    Color sideToMove = position.side_to_move();
+    CheckInfo ci(pos, sideToMove, lookForCheckDefense);
 
+    if (pos.in_check()) {
+        /* compute responses to a check, if any */
+        std::cout "king is currently in check." std::endl;
+        // check if the piece is in check by >1 piece
+        // if it is not then code to move out of check or take piece that puts it in check
+        //if it is then code to move the piece out of check
+    }
+    else {
+        /* compute ordinary moves, if any */
+    }
 }
 
 void RootMoveList::print() const
 { // TO DO:
+    //Brandon: this should work but I haven't tested it because I'm not sure where to go with the generate_from_position function
+    for (int i=0; i<rmlist.length; i++) {
+        std::cout rmlist[i] std::endl;
+    }
 }
+
+class CheckInfo {
+  public:
+    ci(pos, sideToMove, lookForCheckDefense) {
+
+    }
+};
 
 
 
