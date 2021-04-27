@@ -1,0 +1,292 @@
+// Detect their checks and determine our pinned pieces:
+CheckInfo::CheckInfo(Position& pos, Color sideToMove, bool& lookForCheckDefense)
+{
+	Piece  p, p_our, p_their, p_their_too, p_candidate_for_pinned;
+	Square s, candidate_for_pinned_s;
+	int    dir, opt;
+
+	// Where is the king of the side to move ("our side", "us")?
+	ksq = pos.king_square(sideToMove);
+	// Initialize checkersBB to all zeros:
+	pos.clear_checkers();
+	// Initialize dcCandidates, pinned, checkSq[NUM_PIECE_TYPES], and lineOfDefense to all zeros:
+	dcCandidates.reset(); // 04/01/2012: Instead of our own candidates to give a discovered check,
+	                      // D.A.G. is about to store the enemy hidden checkers here
+	pinned.reset();
+	for(PieceType pt=NO_PIECE_TYPE;pt<=BISHOP;pt=PieceType(pt+1))
+		checkSq[pt].reset();
+	// initialize the line of defense to all NO's:
+	for (opt = 0; opt < MAX_CHECK_DEFENSE_SQUARES; opt++)
+		lineOfDefense[opt] = NO;
+
+	/// Are we in check from an enemy PAWN?..
+	// if we're playing white, imagine a white pawn in the white king's square;
+	// otherwise imagine a black pawn in the black king's square.
+	// Now explore the pawn's capture directions (1 and 2), with at most one
+	// option each, to find out if a pawn of the opposite color is there:
+	p_our = Piece(WHITE_PAWN + sideToMove);
+	p_their = Piece(WHITE_PAWN + ~sideToMove);
+	dir=1;
+    while (protoMoves[p_our][ksq][dir][0]!=NO) // with pawns, we won't exhaust directions
+	{
+		opt=0;
+		do
+		{
+			s = protoMoves[p_our][ksq][dir][opt];
+			if(pos.piece_on(s)==p_their)     // found a pawn checker
+			{
+				// Enter the checker info into the StateInfo struct:
+				pos.set_checker_square(s);
+				// Enter the checker info into the CheckInfo struct:
+				checkSq[PAWN][s] = 1;
+				// Cannot defend against a pawn check:
+				lookForCheckDefense = false;
+			}
+			opt++;
+		}
+		while (protoMoves[p_our][ksq][dir][opt]!=NO);
+		dir++;
+	}
+
+	/// Are we in check from an enemy KNIGHT?
+	// if we're playing white, imagine a white knight in the white king's square;
+	// otherwise imagine a black knight in the black king's square.
+	// Now explore the knight's capture directions, with at most one
+	// option each, to find out if a knight of the opposite color is there:
+	p_our = Piece(WHITE_KNIGHT + sideToMove);
+	p_their = Piece(WHITE_KNIGHT + ~sideToMove);
+	dir=0;
+    while ((dir<MAX_DIRECTIONS)&&(protoMoves[p_our][ksq][dir][0]!=NO))
+	{
+		opt=0;
+		do
+		{
+			s = protoMoves[p_our][ksq][dir][opt];
+			if(pos.piece_on(s)==p_their)
+			{
+				// Enter the checker info into the StateInfo struct:
+				pos.set_checker_square(s);
+				// Enter the checker info into the CheckInfo struct:
+				checkSq[KNIGHT][s] = 1;
+				// Cannot defend against a knight check:
+				lookForCheckDefense = false;
+			}
+			opt++;
+		}
+		while (protoMoves[p_our][ksq][dir][opt]!=NO);
+		dir++;
+	}
+
+	/// Are we in check from an enemy QUEEN or ROOK
+	/// from a horizontal or vertical direction?
+	// if we're playing white, imagine a white rook in the white king's square;
+	// otherwise imagine a black rook in the black king's square.
+	// Now explore the rook's capture directions to find out if
+	// a queen or rook of the opposite color is there:
+	p_our = Piece(WHITE_ROOK + sideToMove);
+	p_their = Piece(WHITE_ROOK + ~sideToMove);
+	p_their_too = Piece(WHITE_QUEEN + ~sideToMove);
+	dir=0;
+    while (protoMoves[p_our][ksq][dir][0]!=NO) // with rooks, we won't exhaust directions
+	{
+		opt=0;
+		// Won't look for a hidden checker until a pinned piece is encountered:
+		bool lookForHiddenChecker = false;
+		do
+		{
+			s = protoMoves[p_our][ksq][dir][opt];
+			p = pos.piece_on(s);
+			if (p > EN_PASSANT) // if the square is NOT (empty OR en_passant)
+			{
+				if (colorOf(p)==sideToMove) // found our piece
+				{
+					if (lookForHiddenChecker)
+						break; // There is no hidden checker
+					else
+					{   // Start looking for a hidden checker
+						lookForHiddenChecker = true;
+						candidate_for_pinned_s = s;
+						p_candidate_for_pinned = p;
+					}
+				}
+				else if (p==p_their) // found an enemy rook
+				{
+					if (lookForHiddenChecker)
+					{   // found a hidden checker
+						// Enter the hidden checker info into dcCandidates:
+						dcCandidates[s] = 1;
+						// Update the bitboard of pinned pieces:
+						pinned[candidate_for_pinned_s] = 1;
+						break;
+					}
+					else
+					{   // found a checker
+						if ((!opt) || pos.how_many_checkers())
+							// Cannot defend against a check from an adjacent square or
+							// against multiple checkers:
+							lookForCheckDefense = false;
+						else
+						{
+							// Set the line of defense:
+							for (int i=0;i<opt;i++)
+								lineOfDefense[i]=protoMoves[p_our][ksq][dir][i];
+						}
+						// Enter the checker info into the StateInfo struct:
+						pos.set_checker_square(s);
+						// Enter the checker info into the CheckInfo struct:
+						checkSq[ROOK][s] = 1;
+						break;
+					}
+				}
+				else if (p==p_their_too) // found an enemy queen
+				{
+					if (lookForHiddenChecker)
+					{   // found a hidden checker
+						// Enter the hidden checker info into dcCandidates:
+						dcCandidates[s] = 1;
+						// Update the bitboard of pinned pieces:
+						pinned[candidate_for_pinned_s] = 1;
+						break;
+					}
+					else
+					{   // found a checker
+						if ((!opt) || pos.how_many_checkers())
+							// Cannot defend against a check from an adjacent square or
+							// against multiple checkers:
+							lookForCheckDefense = false;
+						else
+						{
+							// Set the line of defense:
+							for (int i=0;i<opt;i++)
+								lineOfDefense[i]=protoMoves[p_our][ksq][dir][i];
+						}
+						// Enter the checker info into the StateInfo struct:
+						pos.set_checker_square(s);
+						// Enter the checker info into the CheckInfo struct:
+						checkSq[QUEEN][s] = 1;
+						break;
+					}
+				}
+				else break; // found a non-checking enemy piece
+			}
+			opt++;
+		}
+		while (protoMoves[p_our][ksq][dir][opt]!=NO);
+		dir++;
+	}
+
+	/// Are we in check from an enemy QUEEN or BISHOP from a diagonal direction?
+	// If we're playing white, imagine a white bishop in the white king's square;
+	// otherwise imagine a black bishop in the black king's square.
+	// Now explore the bishop's capture directions to find out if
+	// a queen or bishop of the opposite color is there:
+	p_our = Piece(WHITE_BISHOP + sideToMove);
+	p_their = Piece(WHITE_BISHOP + ~sideToMove);
+	p_their_too = Piece(WHITE_QUEEN + ~sideToMove);
+	dir=0;
+    while (protoMoves[p_our][ksq][dir][0]!=NO) // with bishops, we won't exhaust directions
+	{
+		opt=0;
+		// Won't look for a hidden checker until a pinned piece is encountered:
+		bool lookForHiddenChecker = false;
+		do
+		{
+			s = protoMoves[p_our][ksq][dir][opt];
+			p = pos.piece_on(s);
+			if (p > EN_PASSANT) // if the square is NOT (empty OR en_passant)
+			{
+				if (colorOf(p)==sideToMove) // found our piece
+				{
+					if (lookForHiddenChecker)
+						break; // There is no hidden checker
+					else
+					{   // Start looking for a hidden checker
+						lookForHiddenChecker = true;
+						candidate_for_pinned_s = s;
+						p_candidate_for_pinned = p;
+					}
+				}
+				else if (p==p_their) // found an enemy bishop
+				{
+					if (lookForHiddenChecker)
+					{   // found a hidden checker
+						// Enter the hidden checker info into dcCandidates:
+						dcCandidates[s] = 1;
+						// Update the bitboard of pinned pieces:
+						pinned[candidate_for_pinned_s] = 1;
+						break;
+					}
+					else
+					{   // found a checker
+						if ((!opt) || pos.how_many_checkers())
+							// Cannot defend against a check from an adjacent square or
+							// against multiple checkers:
+							lookForCheckDefense = false;
+						else
+						{
+							// Set the line of defense:
+							for (int i=0;i<opt;i++)
+								lineOfDefense[i]=protoMoves[p_our][ksq][dir][i];
+						}
+						// Enter the checker info into the StateInfo struct:
+						pos.set_checker_square(s);
+						// Enter the checker info into the CheckInfo struct:
+						checkSq[BISHOP][s] = 1;
+						break;
+					}
+				}
+				else if (p==p_their_too) // found an enemy queen
+				{
+					if (lookForHiddenChecker)
+					{   // found a hidden checker
+						// Enter the hidden checker info into dcCandidates:
+						dcCandidates[s] = 1;
+						// Update the bitboard of pinned pieces:
+						pinned[candidate_for_pinned_s] = 1;
+						break;
+					}
+					else
+					{   // found a checker
+						if ((!opt) || pos.how_many_checkers())
+							// Cannot defend against a check from an adjacent square or
+							// against multiple checkers:
+							lookForCheckDefense = false;
+						else
+						{
+							// Set the line of defense:
+							for (int i=0;i<opt;i++)
+								lineOfDefense[i]=protoMoves[p_our][ksq][dir][i];
+						}
+						// Enter the checker info into the StateInfo struct:
+						pos.set_checker_square(s);
+						// Enter the checker info into the CheckInfo struct:
+						checkSq[QUEEN][s] = 1;
+						break;
+					}
+				}
+				else break; // found a non-checking enemy piece
+			}
+			opt++;
+		}
+		while (protoMoves[p_our][ksq][dir][opt]!=NO);
+		dir++;
+	}
+
+	/// Output for debugging:
+	pos.print_checkers();         // Print the checkers bitboard
+	print_bitboard(dcCandidates, "Hidden checkers:"); // Print the hidden checkers bitboard
+	print_bitboard(pinned, "Pinned pieces:");       // Print the pinned pieces bitboard
+	Bitboard lineOfDefenseBB;     // the line of defense bitboard
+	// Initialize the line of defense bitboard:
+	lineOfDefenseBB.reset();      // clears every bit
+	// Fill the line of defense bitboard:
+	opt = 0;
+	while(lineOfDefense[opt]!=NO)
+	{
+		lineOfDefenseBB[lineOfDefense[opt]] = 1;
+		opt++;
+	}
+	// Print the line of defense bitboard:
+	print_bitboard(lineOfDefenseBB, "Line of defense:");
+}
+

@@ -98,11 +98,15 @@ void RootMoveList::generate_from_position(Position& pos)
 { // TO DO:
     Position position;
     Color sideToMove = position.side_to_move();
+    //dont think this is right but I also think im calling checkinfo in the wrong spot
+    bool lookForCheckDefense = false;
     CheckInfo ci(pos, sideToMove, lookForCheckDefense);
 
     if (pos.in_check()) {
         /* compute responses to a check, if any */
-        std::cout "king is currently in check." std::endl;
+
+        //std::cout "king is currently in check." std::endl;
+
         // check if the piece is in check by >1 piece
         // if it is not then code to move out of check or take piece that puts it in check
         //if it is then code to move the piece out of check
@@ -118,14 +122,8 @@ void RootMoveList::print() const
     for (int i=0; i<rmlist.length; i++) {
         std::cout rmlist[i] std::endl;
     }
+
 }
-
-class CheckInfo {
-  public:
-    ci(pos, sideToMove, lookForCheckDefense) {
-
-    }
-};
 
 
 

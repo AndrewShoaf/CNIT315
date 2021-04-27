@@ -64,6 +64,12 @@
 		<Unit filename="benchmark.cpp" />
 		<Unit filename="bitboard.cpp" />
 		<Unit filename="bitboard.h" />
+		<Unit filename="checkinfo.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="checkinfo.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="chess.h" />
 		<Unit filename="movegen.cpp" />
 		<Unit filename="movegen.h" />
