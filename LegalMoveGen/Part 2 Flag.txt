@@ -1,0 +1,148 @@
+Part 2 Code
+main()
+{
+	if (isEnPassant == true)
+	{
+		M_EN_PASSANT = 1;
+	}
+	else
+	{
+		M_EN_PASSANT = 0;
+	}
+
+	if (isCastleShort == true)
+	{
+		M_CASTLE_SHORT = 1;
+	}
+	else
+	{
+		M_CASTLE_SHORT = 0;
+	}
+
+	if (isCastleLong == true)
+	{
+		M_CASTLE_LONG = 1;
+	}
+	else
+	{
+		M_CASTLE_LONG = 0;
+	}
+
+	M_NULL_MOVE = 0;
+
+	if (isMoveNone == true)
+	{
+		M_MOVE_NONE = 1;
+	}
+	else
+	{
+		M_MOVE_NONE = 0;
+	}
+
+	M_NO_BOOK_MOVE = 1;
+
+	if (isCapture == true)
+	{
+		M_CAPTURE = 1;
+	}
+	else
+	{
+		M_CAPTURE = 0;
+	}
+
+	if (isCheck == true)
+	{
+		M_ISCHECK = 1;
+	}
+	else
+	{
+		M_ISCHECK = 0;
+	}
+
+	M_KILLER = 0;
+
+	if (isPassage == true)
+	{
+		M_PASSAGE = 1;
+	}
+	else
+	{
+		M_PASSAGE = 0;
+	}
+
+	if (isCheckDefense == true)
+	{
+		M_CHECK_DEFENSE = 1;
+	}
+	else
+	{
+		M_CHECK_DEFENSE = 0;
+	}
+
+	if (isEvasion == true)
+	{
+		M_EVASION = 1;
+	}
+	else
+	{
+		M_EVASION = 0;
+	}
+
+	if (isQuiet == true)
+	{
+		M_QUIET = 1;
+	}
+	else
+	{
+		M_QUIET = 0;
+	}
+
+	if (isDraw == true)
+	{
+		M_DRAW = 1;
+	}
+	else
+	{
+		M_DRAW = 0;
+	}
+
+	if (isStalemate == true)
+	{
+		M_STALEMATE = 1;
+	}
+	else
+	{
+		M_STALEMATE = 0;
+	}
+
+	if (isCheckmate == true)
+	{
+		M_CHECKMATE = 1;
+	}
+	else
+	{
+		M_CHECKMATE = 0;
+	}
+}
+
+
+print_flags()
+{
+	cout << "M_EN_PASSANT: " << M_EN_PASSANT << endl;
+	cout << "M_CASTLE_SHORT: " << M_CASTLE_SHORT << endl;
+	cout << "M_CASTLE_LONG: " << M_CASTLE_LONG << endl;
+	cout << "M_NULL_MOVE: " << M_NULL_MOVE << endl;
+	cout << "M_MOVE_NONE: " << M_MOVE_NONE << endl;
+	cout << "M_NO_BOOK_MOVE: " << M_NO_BOOK_MOVE << endl;
+	cout << "M_CAPTURE: " << M_CAPTURE << endl;
+	cout << "M_ISCHECK: " << M_ISCHECK << endl;
+	cout << "M_KILLER: " << M_KILLER << endl;
+	cout << "M_PASSAGE: " << M_PASSAGE << endl;
+	cout << "M_CHECK_DEFENSE: " << M_CHECK_DEFENSE << endl;
+	cout << "M_EVASION: " << M_EVASION << endl;
+	cout << "M_QUIET: " << M_QUIET << endl;
+	cout << "M_DRAW: " << M_DRAW << endl;
+	cout << "M_STALEMATE: " << M_STALEMATE << endl;
+	cout << "M_CHECKMATE: " << M_CHECKMATE << endl;
+
+}
